@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recorte Ajustable</title> <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script> <!-- Cropper.js CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
+</head>
+
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl min-h-[81vh] flex flex-col justify-center">
+        <h1 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Recorte Ajustable</h1>
+
+        <div class="flex flex-col items-center">
+            <input type="file" id="fileInput" accept="image/*" class="mb-4 text-gray-700 cursor-pointer">
+
+            <div class="w-full flex justify-center">
+                <img id="image" src="" alt="Imagen cargada" class="hidden rounded-lg max-w-full">
+            </div>
+
+            <!-- Contenedor de botones de relación y checkbox -->
+            <div class="mt-4 flex gap-4 items-center">
+                <button id="setRatio1" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                    1:1
+                </button>
+                <button id="setRatio2" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                    16:9
+                </button>
+                <button id="setRatio3" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                    4:3
+                </button>
+                <!-- Checkbox en el mismo contenedor -->
+                <label class="flex items-center gap-2 cursor-pointer">
+                    <input type="checkbox" id="freeResizeSwitch" class="form-checkbox h-5 w-5 text-blue-600">
+                    <span class="text-gray-700 text-sm">Bloquear proporciones</span>
+                </label>
+            </div>
+
+            <button id="crop" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+                Recortar
+            </button>
+
+            <!-- Contenedor de Vista Previa -->
+            <div id="previewContainer" class="mt-6 hidden">
+                <div class="w-48 h-48 border rounded-lg overflow-hidden shadow-md bg-gray-100">
+                    <h3 class="text-sm text-gray-500 text-center mt-2">Vista previa</h3>
+                    <img id="preview" alt="Preview" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cropper.js JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.js"></script>
+    <script>
+        let cropper;
+
+        // Selección de elementos
+        const fileInput = document.getElementById('fileInput');
+        const imageElement = document.getElementById('image');
+        const previewContainer = document.getElementById('previewContainer');
+        const previewElement = document.getElementById('preview');
+        const freeResizeSwitch = document.getElementById('freeResizeSwitch');
+
+        // Manejar carga de archivo
+        fileInput.addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    // Mostrar la imagen cargada
+                    imageElement.src = e.target.result;
+                    imageElement.classList.remove('hidden');
+                    previewContainer.classList.remove('hidden');
+                    previewContainer.classList.add('h-48', 'flex', 'justify-center', 'items-center');
+
+                    // Destruir instancias previas de cropper
+                    if (cropper) cropper.destroy();
+
+                    // Crear nueva instancia de Cropper.js
+                    cropper = new Cropper(imageElement, {
+                        viewMode: 1,
+                        aspectRatio: freeResizeSwitch.checked ? 1 : NaN, // Inicia con aspecto fijo o libre
+                        movable: true,
+                        cropBoxResizable: true,
+                        cropBoxMovable: true,
+                        preview: '.w-48', // Contenedor de vista previa
+                    });
+                };
+                reader.readAsDataURL(file);
+            } else {
+                // Si no se selecciona un archivo, ocultar todo
+                imageElement.classList.add('hidden');
+                previewContainer.classList.add('hidden');
+                if (cropper) cropper.destroy();
+            }
+        });
+
+        // Relación de aspecto
+        document.getElementById('setRatio1').addEventListener('click', () => {
+            if (cropper) cropper.setAspectRatio(1);
+        });
+        document.getElementById('setRatio2').addEventListener('click', () => {
+            if (cropper) cropper.setAspectRatio(16 / 9);
+        });
+        document.getElementById('setRatio3').addEventListener('click', () => {
+            if (cropper) cropper.setAspectRatio(4 / 3);
+        });
+
+        // Checkbox para habilitar/deshabilitar ajuste libre
+        freeResizeSwitch.addEventListener('change', function () {
+            if (cropper) {
+                cropper.setAspectRatio(this.checked ? 1 : NaN); // NaN permite ajuste libre
+            }
+        });
+
+        // Manejar recorte y descarga automática
+        document.getElementById('crop').addEventListener('click', function () {
+            if (!cropper) {
+                alert("Por favor, carga una imagen antes de recortar.");
+                return;
+            }
+
+            // Generar recorte
+            const canvas = cropper.getCroppedCanvas();
+            if (canvas) {
+                previewElement.src = canvas.toDataURL(); // Actualizar preview
+
+                // Descargar automáticamente
+                const link = document.createElement('a');
+                link.download = 'imagen_recortada.png'; // Nombre del archivo descargado
+                link.href = canvas.toDataURL('image/png'); // Obtener URL base64
+                link.click(); // Simular clic para iniciar la descarga
+            } else {
+                alert("No se pudo generar el recorte.");
+            }
+        });
+    </script>
+</body>
+
+</html>
