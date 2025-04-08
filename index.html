@@ -128,11 +128,15 @@
             if (canvas) {
                 previewElement.src = canvas.toDataURL(); // Actualizar preview
 
+                // Generar 10 caracteres aleatorios (letras a-z y números 0-9)
+                const randomChars = Math.random().toString(36).substring(2, 12); // Tomamos 10 caracteres después del '0.'
+                const randomFilename = `output_${randomChars}.png`; // Combinamos prefijo, parte aleatoria y extensión
                 // Descargar automáticamente
                 const link = document.createElement('a');
-                link.download = 'imagen_recortada.png'; // Nombre del archivo descargado
+                link.download = randomFilename; // Asignar el nuevo nombre aleatorio y corto
                 link.href = canvas.toDataURL('image/png'); // Obtener URL base64
                 link.click(); // Simular clic para iniciar la descarga
+
             } else {
                 alert("No se pudo generar el recorte.");
             }
