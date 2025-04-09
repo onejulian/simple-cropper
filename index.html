@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 
 <head>
     <meta charset="UTF-8">
@@ -9,12 +9,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.min.css" />
 </head>
 
-<body class="bg-gray-100 flex items-center justify-center min-h-screen">
-    <div class="bg-white shadow-lg rounded-lg p-6 w-full max-w-2xl min-h-[81vh] flex flex-col justify-center">
-        <h1 class="text-2xl font-semibold text-gray-800 mb-4 text-center">Recorte Ajustable</h1>
+<body class="bg-gray-100 dark:bg-gray-900 flex items-center justify-center min-h-screen">
+    <div class="bg-white dark:bg-gray-800 shadow-lg rounded-lg p-6 w-full max-w-2xl min-h-[81vh] flex flex-col justify-center">
+        <h1 class="text-2xl font-semibold text-gray-800 dark:text-gray-200 mb-4 text-center">Recorte Ajustable</h1>
 
         <div class="flex flex-col items-center">
-            <input type="file" id="fileInput" accept="image/*" class="mb-4 text-gray-700 cursor-pointer">
+            <input type="file" id="fileInput" accept="image/*" class="mb-4 text-gray-700 dark:text-gray-300 cursor-pointer">
 
             <div class="w-full flex justify-center">
                 <img id="image" src="" alt="Imagen cargada" class="hidden rounded-lg max-w-full">
@@ -22,30 +22,30 @@
 
             <!-- Contenedor de botones de relación y checkbox -->
             <div class="mt-4 flex gap-4 items-center">
-                <button id="setRatio1" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                <button id="setRatio1" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">
                     1:1
                 </button>
-                <button id="setRatio2" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                <button id="setRatio2" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">
                     16:9
                 </button>
-                <button id="setRatio3" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+                <button id="setRatio3" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700">
                     4:3
                 </button>
                 <!-- Checkbox en el mismo contenedor -->
                 <label class="flex items-center gap-2 cursor-pointer">
-                    <input type="checkbox" id="freeResizeSwitch" class="form-checkbox h-5 w-5 text-blue-600">
-                    <span class="text-gray-700 text-sm">Bloquear proporciones</span>
+                    <input type="checkbox" id="freeResizeSwitch" class="form-checkbox h-5 w-5 text-blue-600 dark:text-blue-500 dark:bg-gray-700 dark:border-gray-600">
+                    <span class="text-gray-700 dark:text-gray-300 text-sm">Bloquear proporciones</span>
                 </label>
             </div>
 
-            <button id="crop" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            <button id="crop" class="mt-4 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600 dark:bg-green-600 dark:hover:bg-green-700">
                 Recortar
             </button>
 
             <!-- Contenedor de Vista Previa -->
             <div id="previewContainer" class="mt-6 hidden">
-                <div class="w-48 h-48 border rounded-lg overflow-hidden shadow-md bg-gray-100">
-                    <h3 class="text-sm text-gray-500 text-center mt-2">Vista previa</h3>
+                <div class="w-48 h-48 border dark:border-gray-600 rounded-lg overflow-hidden shadow-md bg-gray-100 dark:bg-gray-700">
+                    <h3 class="text-sm text-gray-500 dark:text-gray-400 text-center mt-2">Vista previa</h3>
                     <img id="preview" alt="Preview" class="w-full h-full object-cover">
                 </div>
             </div>
